@@ -1,0 +1,38 @@
+
+
+#textServers{
+    color: green;
+}
+#serverTable tr:hover{
+    background: #1ac11e;
+}
+/*#dataFromServer td{
+    width: 150px;
+}*/
+#dataFromServer thead,#dataFromServer tbody{
+    /*display: inline-block;*/
+    display: -moz-inline-stack;
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+}
+
+.form-control {
+    width: auto;
+}
+#leftDiv,#rightDiv{
+    position: absolute;
+    overflow-x: auto;
+    padding: 5px;
+}
+#leftDiv{
+    top: 5%;
+    left: 0;
+    width: 65%;
+}
+#rightDiv{
+    /*min-width: 250px;*/
+    right: 0;
+    width: 35%;
+}
+

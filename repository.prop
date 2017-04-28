@@ -1,0 +1,16 @@
+#Users
+
+user0.login=1
+#password 1
+user0.password=$2a$10$bcWBZxpJybDoX5zaA.oufOM.GHp0Fmfxd1QQYd3htM.b7EWGt7uZ.
+user0.role=admin
+
+user1.login=user
+#password user
+user1.password=$2a$10$eOs6fpk0fiWOBhhAvu1EQug0dy5gmCCND9MWYTRT/qdYGbsUfn1My
+user1.role=user
+
+user2.login=ajwar
+#password ra0843766
+user2.password=$2a$10$1jigvYIYPCqExwcmLqCzYuJ2USPq5BZRGy4grNyq9zK6POPsPz0b.
+user2.role=admin
