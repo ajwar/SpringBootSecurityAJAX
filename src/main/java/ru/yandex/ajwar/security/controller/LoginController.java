@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.ExecutorService;
 
 import static ru.yandex.ajwar.security.utils.Util.*;
+import static ru.yandex.ajwar.security.utils.Constant.*;
 
 
 /**
@@ -27,7 +28,7 @@ public class LoginController {
         AdminController.future=executorService.submit(()->{
             JSONObject obj=new JSONObject();
             obj.put("goal","get_list_servers");
-            AdminController.list=parseResponseToList(sendRequestToServer("http","127.0.0.1",5505,obj));
+            AdminController.list=parseResponseToList(sendRequestToServer(SCHEMA,HOST,PORT,obj));
         });
         return "login";
     }

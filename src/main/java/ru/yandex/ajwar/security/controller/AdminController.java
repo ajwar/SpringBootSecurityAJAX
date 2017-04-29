@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 import static ru.yandex.ajwar.security.utils.Util.getPrincipal;
+import static ru.yandex.ajwar.security.utils.Constant.*;
 
 @Controller
 public class AdminController {
@@ -23,8 +24,10 @@ public class AdminController {
 		while (true){
 			if (future.isDone() || future.isCancelled()) break;
 		}
+		model.addAttribute("hostManage",HOST);
+		model.addAttribute("portManage",PORT);
+		model.addAttribute("schemaManage",SCHEMA);
 		model.addAttribute("list",list);
-
 		return "admin";
 	}
 

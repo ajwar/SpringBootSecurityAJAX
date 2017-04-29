@@ -9299,7 +9299,7 @@ jQuery.extend( {
 		return jqXHR;
 	},
 
-	getJSON: function( url, data, callback ) {
+	postJSON: function (url, data, callback) {
 		return jQuery.get( url, data, callback, "json" );
 	},
 

@@ -87,7 +87,7 @@ public class Util {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
         if (HttpResult == HttpURLConnection.HTTP_OK) {
             BufferedReader br = null;
@@ -99,14 +99,14 @@ public class Util {
                 }
                 br.close();
             } catch (IOException e) {
-
+                e.printStackTrace();
             }
             object = sb.toString();
         } else {
             try {
                 object = con.getResponseMessage();
             } catch (IOException e) {
-
+                e.printStackTrace();
             }
         }
         return object;

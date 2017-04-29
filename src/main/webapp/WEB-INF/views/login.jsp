@@ -4,12 +4,12 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>HelloWorld Login page</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>User authentication page</title>
 		<link href="<c:url value='/static/css/bootstrap.min.css' />"  rel="stylesheet"/>
 		<link href="<c:url value='/static/css/login.css' />" rel="stylesheet"/>
 		<script src="<c:url value='/static/js/jquery-3.2.1.js' />"></script>
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 
 	<body>
@@ -44,8 +44,7 @@
 							</div>
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 							<div class="form-actions">
-								<input type="submit"
-									class="btn btn-block btn-primary btn-default" value="Log in">
+								<input type="submit" class="btn btn-block btn-primary btn-default" value="Log in" <%--onclick="this.disabled=true"--%>>
 							</div>
 						</form>
 					</div>

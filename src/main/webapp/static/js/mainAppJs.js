@@ -1,15 +1,17 @@
 /**
  * Created by Ajwar on 17.04.2017.
  */
-var inputText,hostAndPortAdminServ;
+var inputText,hostAndPortAdminServ/*,login*/;
 init();
 
 function init() {
 /*    setTimeout(updateTableInfoServers,0);*/
-    setInterval(updateTableInfoServers,10000);
-    //setInterval(doAjax,10000);
-    hostAndPortAdminServ='http://127.0.0.1:5505';
     inputText={'goal':'get_list_servers'};
+    setInterval(updateTableInfoServers,10000);
+    $(document).ready(function () {
+        hostAndPortAdminServ=$('#schemaManage').text()+'://'+$('#hostManage').text()+':'+$('#portManage').text();
+        /*login=$('#loginManage').text()*/;
+    });
 }
 function doAjax() {
     $.ajax({
@@ -25,40 +27,29 @@ function doAjax() {
                 trHTML += "<tr><td>" + item.index + "</td><td>" + item.name + "</td><td>" + item.version + "</td><td>"+item.port + "</td><td>" +item.adminPort + "</td><td>"+item.count + "</td><td>" + item.station + "</td></tr>";
                 opHTML += "<option value='" + item.index + "'>" + item.index + "</option>";
             });
-            //$("tr:has(td)").remove();
-            //$('#serverTable').append(trHTML);
             $('#indexSelect').find('option').remove().end().append(opHTML).val(tempFirst);
             $('#serverTable').find('tr:has(td)').remove().end().append(trHTML);
         }
     });
 }
-
 function updateTableInfoServers() {
-    //$.getJSON(hostAndPortAdminServ,inputText,function (data) {
-    $.getJSON(hostAndPortAdminServ,JSON.stringify(inputText),function (data) {
-        var trHTML,opHTML,tempFirst;
-        trHTML=opHTML=tempFirst='';
-        $.each(data, function (i, item) {
-            if (i==0) tempFirst=item.index;
-            trHTML += "<tr><td>" + item.index + "</td><td>" + item.name + "</td><td>" + item.version + "</td><td>"+item.port + "</td><td>" +item.adminPort + "</td><td>"+item.count + "</td><td>" + item.station + "</td></tr>";
-            opHTML += "<option value='" + item.index + "'>" + item.index + "</option>";
-        });
-        //$("tr:has(td)").remove();
-        //$('#serverTable').append(trHTML);
+    var NOT_CONNECTION = "No connection";
+    var trHTML, opHTML, tempFirst;
+    trHTML = opHTML = tempFirst = '';
+    $.postJSON(hostAndPortAdminServ, JSON.stringify(inputText),function (data) {
+            $.each(data, function (i, item) {
+                if (i == 0) tempFirst = item.index;
+                trHTML += "<tr><td>" + item.index + "</td><td>" + item.name + "</td><td>" + item.version + "</td><td>" + item.port + "</td><td>" + item.adminPort + "</td><td>" + item.count + "</td><td>" + item.station + "</td></tr>";
+                opHTML += "<option value='" + item.index + "'>" + item.index + "</option>";
+            });
         $('#indexSelect').find('option').remove().end().append(opHTML).val(tempFirst);
+        $('#serverTable').find('tr:has(td)').remove().end().append(trHTML);
+        })
+        .fail(function () {
+        trHTML = "<tr><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td></tr>";
         $('#serverTable').find('tr:has(td)').remove().end().append(trHTML);
     });
 }
-
-/*function createFile(fileName,text) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', fileName);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-}*/
 
 function createFile(filename, data) {
     var blob = new Blob([data], {type: 'text/csv'});
@@ -75,9 +66,10 @@ function createFile(filename, data) {
         window.URL.revokeObjectURL();
     }
 }
-function runCmd() {
+function runCmd(login) {
     var cmdJsonObj=new Object();
     var cmdSelectBox=document.getElementById("cmdSelect");
+    cmdJsonObj.login=login;
     cmdJsonObj.goal=cmdSelectBox.options[cmdSelectBox.selectedIndex].value;
     var indexSelectBox=document.getElementById("indexSelect");
     if (indexSelectBox.style.display == "") {
@@ -85,15 +77,15 @@ function runCmd() {
     }
     var strJson=JSON.stringify(cmdJsonObj);
     if (cmdJsonObj.goal=="send_options_server") {
-        sendFile(cmdJsonObj.index);
+        sendFile(cmdJsonObj.index,login);
     }else if (cmdJsonObj.goal=="get_options_server"){
-        $.getJSON(hostAndPortAdminServ,strJson,function (data) {
-            $.each(data,function (i, item) {
-                createFile(item.nameFile,item.optionServer);
+        $.postJSON(hostAndPortAdminServ, strJson, function (data) {
+            $.each(data, function (i, item) {
+                createFile(item.nameFile, item.optionServer);
             })
         });
     }else {
-        $.getJSON(hostAndPortAdminServ,strJson,function (data) {
+        $.postJSON(hostAndPortAdminServ, strJson, function (data) {
             createTableAfterCmd(data);
         });
     }
@@ -104,47 +96,40 @@ function createTableAfterCmd(data) {
     $.each(data,function (i,item) {
         var strBody;
         if (i==0) {
-            var strHead;
-            //window.alert(item.response+"=response");
+            var strHead='';
             if (item.response!=undefined){
-                strHead=createTableHeadVertical("Response server");
-                /*strHead=createTableHead("Response server");*/
+                strHead=createTableHead("Response server");
             /*}else if(item.version!=undefined){
                 strHead=createTableHead("Server Name","Port","Admin Port","Version","Online");*/
             }else {
-                strHead=createTableHeadVertical("OS and Arch","% free memory","% free swap memory","Load average","System cpu load",
+                strHead=createTableHead("OS and Arch","% free memory","% free swap memory","Load average","System cpu load",
                     "Process cpu load","Count all process","Count all threads","Process cpu Time");
-                /*strHead=createTableHead("OS and Arch","% free memory","% free swap memory","Load average","System cpu load",
-                    "Process cpu load","Count all process","Count all threads","Process cpu Time");*/
             }
             $('#dataFromServer').find("thead").append(strHead);
         }
 
         if (item.response!=undefined){
-            //strBody=createTableBody(item.response);
-            strBody=createTableBodyVertical(item.response);
+            strBody=createTableBody(item.response);
         /*}else if(item.version!=undefined){
             strBody=createTableBody(item.serverName,item.port,item.adminPort,item.version,item.station);*/
         }else {
-            strBody=createTableBodyVertical(item.osAndArch,item.freeMemory,item.swapMemory,item.loadAverage,item.systemCpuLoad,
+            strBody=createTableBody(item.osAndArch,item.freeMemory,item.swapMemory,item.loadAverage,item.systemCpuLoad,
                 item.processCpuLoad,item.countProcess,item.countThreads,item.processCpuTime);
-            /*strBody=createTableBody(item.osAndArch,item.freeMemory,item.swapMemory,item.loadAverage,item.systemCpuLoad,
-                item.processCpuLoad,item.countProcess,item.countThreads,item.processCpuTime);*/
         }
         $("#dataFromServer").find("tbody").append(strBody);
     });
 }
 
-function sendFile(index) {
+function sendFile(index,login) {
     var file=$("#sendFileSetup")[0].files[0];
     var obj=new Object();
     obj.goal="send_options_server";
     obj.index=index;
+    obj.login=login;
     var reader=new FileReader();
     reader.onload=function () {
         obj.optionServer=this.result;
-        console.log(this.result);
-        $.getJSON(hostAndPortAdminServ,JSON.stringify(obj),function (data) {
+        $.postJSON(hostAndPortAdminServ, JSON.stringify(obj), function (data) {
             createTableAfterCmd(data);
         })
     };
@@ -157,7 +142,6 @@ function createTableBody() {
         body += "<td>" + arguments[i] + "</td>";
     }
     body+="</tr>";
-    console.log("body===="+body);
     return body;
 }
 function createTableBodyVertical() {
@@ -167,7 +151,6 @@ function createTableBodyVertical() {
         body += tr+"<td>" + arguments[i] + "</td>"+trClose;
     }
     body+="";
-    console.log("body===="+body);
     return body;
 }
 
@@ -177,7 +160,6 @@ function createTableHead(){
         head+="<th>"+arguments[i]+"</th>";
     }
     head+="</tr>";
-    console.log("head===="+head);
     return head;
 }
 function createTableHeadVertical(){
@@ -186,7 +168,6 @@ function createTableHeadVertical(){
     for(var i=0;i<arguments.length;i++){
         head+=tr+"<th colspan='"+arguments.length+"'>"+arguments[i]+"</th>"+trClose;
     }
-    console.log("head===="+head);
     return head;
 }
 
@@ -195,23 +176,29 @@ function selectCmd(selectBox) {
     switch (selectedValue){
 /*        case "get_list_servers":*/
         case "get_total_info_system":
-            document.getElementById("indexSelect").style.display="none";//hide select
-            document.getElementById("textServers").style.display="none";//hide select
-            document.getElementById("sendFileForm").style.display="none";//hide select
+            hideElement("none","indexSelect","textServers","sendFileForm");
             break;
 /*        case "serverinfo":*/
         case "get_options_server":
         case "stop":
         case "run":
         /*case "channels_count":*/
-            document.getElementById("indexSelect").style.display="";//show select
-            document.getElementById("textServers").style.display="";//show select
-            document.getElementById("sendFileForm").style.display="none";//show select
+            hideElement("","indexSelect","textServers");
+            hideElement("none","sendFileForm");
             break;
         case "send_options_server":
-            document.getElementById("indexSelect").style.display="";//show select
-            document.getElementById("textServers").style.display="";//show select
-            document.getElementById("sendFileForm").style.display="";//show select
+            hideElement("","indexSelect","textServers","sendFileForm");
             break;
     }
+
 }
+function hideElement() {
+    for(var i=1;i<arguments.length;i++){
+        document.getElementById(arguments[i]).style.display=arguments[0];
+    }
+}
+jQuery.extend({
+    postJSON: function( url, data, callback) {
+        return jQuery.post(url, data, callback, "json");
+    }
+});
