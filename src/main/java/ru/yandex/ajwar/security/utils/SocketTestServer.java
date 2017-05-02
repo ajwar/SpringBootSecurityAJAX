@@ -3,10 +3,15 @@ package ru.yandex.ajwar.security.utils;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
 import org.json.JSONObject;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -41,6 +46,22 @@ public class SocketTestServer {
     }
 
     public static void main(String[] args) throws IOException {
+
+            ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+            ScriptEngine nashorn = scriptEngineManager.getEngineByName("nashorn");
+
+            String name = "Mahesh";
+            Integer result = null;
+
+            try {
+                nashorn.eval("print('" + name + "')");
+                result = (Integer) nashorn.eval("10 + 2");
+
+            }catch(ScriptException e){
+                System.out.println("Error executing script: "+ e.getMessage());
+            }
+
+            System.out.println(result.toString());
         //sendRequestToServer();
 
         /*JSONObject obj=new JSONObject();

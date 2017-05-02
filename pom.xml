@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ru.yandex.ajwar</groupId>
-	<artifactId>spring</artifactId>
+	<artifactId>SpringSecurityRememberMeAnnotation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
@@ -61,11 +61,22 @@
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-example</artifactId>
 			<version>4.1.8.Final</version>
+		</dependency>-->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.1.8.Final</version>
 		</dependency>
+<!--		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-tcnative</artifactId>
+			<version>1.1.33.Fork2</version>
+		</dependency>-->
+
 	</dependencies>
 
 	<build>
@@ -75,7 +86,8 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-	</build>
 
+		<finalName>AuthManageServer##1.0.0</finalName>
+	</build>
 
 </project>

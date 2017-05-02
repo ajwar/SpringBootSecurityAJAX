@@ -5,8 +5,13 @@ import ru.yandex.ajwar.security.model.Role;
 import ru.yandex.ajwar.security.model.User;
 import ru.yandex.ajwar.security.utils.Util;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
+import static ru.yandex.ajwar.security.utils.Constant.NAME_REPOSITORY;
 import static ru.yandex.ajwar.security.utils.Util.loadProperties;
 
 @Service
@@ -15,11 +20,13 @@ public class UserDao implements IUserDao{
 
     @Override
     public User getUserByLogin(String login) {
-        //File file=new File("repository.prop");
         Util.PrefixedProperty prop=null;
         User user=new User();
         try {
-            prop= loadProperties("repository.prop");
+            File file=new File("../webapps/"+NAME_REPOSITORY);
+            Path path=Paths.get(file.toURI());
+            String str=path.normalize().toString();
+            prop= loadProperties(str);
         } catch (IOException e) {
             e.printStackTrace();
         }
