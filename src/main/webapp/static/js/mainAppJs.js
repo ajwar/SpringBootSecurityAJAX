@@ -13,7 +13,7 @@ function init() {
         /*login=$('#loginManage').text()*/;
     });
 }
-function doAjax() {
+/*function doAjax() {
     $.ajax({
         url : hostAndPortAdminServ,
         header:'Access-Control-Allow-Origin: *',
@@ -24,30 +24,33 @@ function doAjax() {
             trHTML=opHTML=tempFirst='';
             $.each(data, function (i, item) {
                 if (i==0) tempFirst=item.index;
-                trHTML += "<tr><td>" + item.index + "</td><td>" + item.name + "</td><td>" + item.version + "</td><td>"+item.port + "</td><td>" +item.adminPort + "</td><td>"+item.count + "</td><td>" + item.station + "</td></tr>";
+                trHTML += "<tr><td>" + item.index + "</td><td>" + item.name + "</td><td>" + item.version + "</td><td>"+item.port + "</td><td>" +item.adminPort + "</td><td>"+item.count + "</td><td>" +item.memory + "</td><td>"+ item.station + "</td></tr>";
                 opHTML += "<option value='" + item.index + "'>" + item.index + "</option>";
             });
             $('#indexSelect').find('option').remove().end().append(opHTML).val(tempFirst);
             $('#serverTable').find('tr:has(td)').remove().end().append(trHTML);
         }
     });
-}
+}*/
 function updateTableInfoServers() {
-    var NOT_CONNECTION = "No connection";
-    var trHTML, opHTML, tempFirst;
-    trHTML = opHTML = tempFirst = '';
+    var NO_CONNECTION = "No connection";
+    var trHTML, opHTML, tempFirst,colorTr;
+    trHTML = opHTML = tempFirst =colorTr= '';
     $.postJSON(hostAndPortAdminServ, JSON.stringify(inputText),function (data) {
             $.each(data, function (i, item) {
                 if (i == 0) tempFirst = item.index;
-                trHTML += "<tr><td>" + item.index + "</td><td>" + item.name + "</td><td>" + item.version + "</td><td>" + item.port + "</td><td>" + item.adminPort + "</td><td>" + item.count + "</td><td>" + item.station + "</td></tr>";
+                if (item.station==0) colorTr=" bgcolor='red'";
+                else colorTr="";
+                trHTML += "<tr"+colorTr+"><td>" + item.index + "</td><td>" + item.name + "</td><td>" + item.version + "</td><td>" + item.port + "</td><td>" + item.adminPort + "</td><td>" + item.count + "</td><td>"+ item.memory + "</td><td>" + item.station + "</td></tr>";
                 opHTML += "<option value='" + item.index + "'>" + item.index + "</option>";
             });
         $('#indexSelect').find('option').remove().end().append(opHTML).val(tempFirst);
         $('#serverTable').find('tr:has(td)').remove().end().append(trHTML);
         })
         .fail(function () {
-        trHTML = "<tr><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td><td>" + NOT_CONNECTION + "</td></tr>";
+        trHTML = "<tr bgcolor='red'><td>" + NO_CONNECTION + "</td><td>" + NO_CONNECTION + "</td><td>" + NO_CONNECTION + "</td><td>" + NO_CONNECTION + "</td><td>" + NO_CONNECTION + "</td><td>" + NO_CONNECTION + "</td><td>"+ NO_CONNECTION + "</td><td>" + NO_CONNECTION + "</td></tr>";
         $('#serverTable').find('tr:has(td)').remove().end().append(trHTML);
+        console.log(trHTML);
     });
 }
 

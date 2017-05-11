@@ -23,7 +23,8 @@ public class UserDao implements IUserDao{
         Util.PrefixedProperty prop=null;
         User user=new User();
         try {
-            File file=new File("../webapps/"+NAME_REPOSITORY);
+            //File file=new File("../webapps/"+NAME_REPOSITORY);
+            File file=new File("d:\\repository.prop");
             Path path=Paths.get(file.toURI());
             String str=path.normalize().toString();
             prop= loadProperties(str);

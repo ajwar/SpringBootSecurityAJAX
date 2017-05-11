@@ -12,6 +12,7 @@ public final class Constant {
     public static final String SCHEMA="HTTP";
     public static final String FS= File.separator;
     public static final String NAME_REPOSITORY="repository.prop";
+    public static final String NOT_CONNECTION="No connection";
     private Constant() {
     }
 }

@@ -11,17 +11,28 @@ public class ServerInfo {
     private String adminPort;
     private String version;
     private String count;
+    private String memory;
 
     public ServerInfo() {
     }
 
-    public ServerInfo(String port, String name, String station, String index, String adminPort, String version) {
+    public ServerInfo(String port, String name, String station, String index, String adminPort, String version, String count, String memory) {
         this.port = port;
         this.name = name;
         this.station = station;
         this.index = index;
         this.adminPort = adminPort;
         this.version = version;
+        this.count = count;
+        this.memory = memory;
+    }
+
+    public String getMemory() {
+        return memory;
+    }
+
+    public void setMemory(String memory) {
+        this.memory = memory;
     }
 
     public String getCount() {
@@ -78,5 +89,19 @@ public class ServerInfo {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return "ServerInfo{" +
+                "port='" + port + '\'' +
+                ", name='" + name + '\'' +
+                ", station='" + station + '\'' +
+                ", index='" + index + '\'' +
+                ", adminPort='" + adminPort + '\'' +
+                ", version='" + version + '\'' +
+                ", count='" + count + '\'' +
+                ", memory='" + memory + '\'' +
+                '}';
     }
 }

@@ -17,6 +17,8 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static ru.yandex.ajwar.security.utils.Constant.NOT_CONNECTION;
+
 /**
  * Created by Ajwar on 21.04.2017.
  */
@@ -44,19 +46,35 @@ public class Util {
     }
 
     public static List<ServerInfo> parseResponseToList(Object object) {
-        JSONArray array = new JSONArray(object.toString());
-        List<ServerInfo> list = new ArrayList<>(array.length());
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject obj = new JSONObject(array.get(i).toString());
-            ServerInfo serverInfo = new ServerInfo();
-            serverInfo.setName(obj.getString("name"));
-            serverInfo.setIndex(obj.getString("index"));
-            serverInfo.setStation(obj.getString("station"));
-            serverInfo.setPort(obj.getString("port"));
-            serverInfo.setAdminPort(obj.getString("adminPort"));
-            serverInfo.setCount(obj.getString("count"));
-            serverInfo.setVersion(obj.getString("version"));
+        ServerInfo serverInfo = new ServerInfo();
+        List<ServerInfo> list;
+        if (object==null){
+            list=new ArrayList<>();
+            serverInfo.setName(NOT_CONNECTION);
+            serverInfo.setIndex(NOT_CONNECTION);
+            serverInfo.setStation(NOT_CONNECTION);
+            serverInfo.setPort(NOT_CONNECTION);
+            serverInfo.setAdminPort(NOT_CONNECTION);
+            serverInfo.setCount(NOT_CONNECTION);
+            serverInfo.setVersion(NOT_CONNECTION);
+            serverInfo.setMemory(NOT_CONNECTION);
             list.add(serverInfo);
+        }else{
+            JSONArray array = new JSONArray(object.toString());
+            list=new ArrayList<>(array.length());
+            for (int i = 0; i < array.length(); i++) {
+                serverInfo=new ServerInfo();
+                JSONObject obj = new JSONObject(array.get(i).toString());
+                serverInfo.setName(obj.getString("name"));
+                serverInfo.setIndex(obj.getString("index"));
+                serverInfo.setStation(obj.getString("station"));
+                serverInfo.setPort(obj.getString("port"));
+                serverInfo.setAdminPort(obj.getString("adminPort"));
+                serverInfo.setCount(obj.getString("count"));
+                serverInfo.setVersion(obj.getString("version"));
+                serverInfo.setMemory(obj.getString("memory"));
+                list.add(serverInfo);
+            }
         }
         return list;
     }
@@ -64,10 +82,12 @@ public class Util {
     //"http"  "127.0.0.1"   5505
     public static Object sendRequestToServer(String scheme, String host, int port, JSONObject obj) {
         URL myURL = null;
+        boolean flag=false;
         int HttpResult = 0;
         StringBuilder sb = null;
         HttpURLConnection con = null;
         Object object = null;
+        OutputStream os=null;
         try {
             myURL = new URI(scheme, null, host, port, null, null, null).toURL();
             con = (HttpURLConnection) myURL.openConnection();
@@ -78,35 +98,48 @@ public class Util {
             con.setReadTimeout(60000);
             con.setDoOutput(true);
             con.setDoInput(true);
-            OutputStream os = con.getOutputStream();
+            os= con.getOutputStream();
             os.write(obj.toString().getBytes("UTF-8"));
             os.flush();
-            os.close();
             sb = new StringBuilder();
             HttpResult = con.getResponseCode();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            flag=true;
             e.printStackTrace();
-        }
-        if (HttpResult == HttpURLConnection.HTTP_OK) {
-            BufferedReader br = null;
-            try {
-                br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                br.close();
+        }finally {
+            if (os!=null) try {
+                os.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            object = sb.toString();
-        } else {
-            try {
-                object = con.getResponseMessage();
-            } catch (IOException e) {
-                e.printStackTrace();
+        }
+        if (!flag) {
+            if (HttpResult == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = null;
+                try {
+                    br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }finally {
+                    if (br!=null) try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                object = sb.toString();
+            } else {
+                try {
+                    object = con.getResponseMessage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return object;

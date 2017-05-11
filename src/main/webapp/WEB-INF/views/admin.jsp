@@ -42,18 +42,20 @@ Dear <strong>${user}</strong>, Welcome to Admin Page.
 				<th id="port">Port</th>
 				<th id="adminPort">Admin port</th>
 				<th id="count">Count active channels</th>
+				<th id="memory">Memory, Mb</th>
 				<th id="onlineServers">Station</th>
 			</tr>
 			</thead>
 			<tbody>
 			<c:forEach var="info" items="${list}">
-				<tr>
+				<tr <c:if test="${info.station eq 0}">bgcolor="red"</c:if>>
 					<td>${info.index}</td>
 					<td>${info.name}</td>
 					<td>${info.version}</td>
 					<td>${info.port}</td>
 					<td>${info.adminPort}</td>
 					<td>${info.count}</td>
+					<td>${info.memory}</td>
 					<td>${info.station}</td>
 				</tr>
 			</c:forEach>
@@ -95,7 +97,5 @@ Dear <strong>${user}</strong>, Welcome to Admin Page.
 			</tbody>
 		</table>
 	</div>
-
-
 </body>
 </html>
