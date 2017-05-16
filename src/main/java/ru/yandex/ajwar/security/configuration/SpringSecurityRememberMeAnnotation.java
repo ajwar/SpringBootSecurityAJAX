@@ -14,12 +14,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 public class SpringSecurityRememberMeAnnotation extends SpringBootServletInitializer {
 
 	public static void main(String[] args){
-/*		String currentPath=SpringSecurityRememberMeAnnotation.class
-				.getProtectionDomain()
-				.getCodeSource().getLocation()
-				.getPath()
-				.replace('/', File.separator.charAt(0));
-		if (currentPath.indexOf(":")<3 && currentPath.indexOf(":")>0) currentPath=currentPath.substring(1);*/
 		SpringApplication.run(SpringSecurityRememberMeAnnotation.class, args);
 	}
 

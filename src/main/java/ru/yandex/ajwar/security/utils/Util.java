@@ -159,6 +159,16 @@ public class Util {
         if (properties.size() == 0) throw new IOException(nameProp + " properties is empty.");
         else return properties;
     }
+    public static PrefixedProperty loadProperties(InputStream is) throws IOException {
+        PrefixedProperty properties = new PrefixedProperty();
+        try {
+            properties.load(new BufferedInputStream(is));
+        }finally {
+            if (is != null) is.close();
+        }
+        if (properties.size() == 0) throw new IOException("properties is empty.");
+        else return properties;
+    }
 
     public static class PrefixedProperty extends Properties {
 
