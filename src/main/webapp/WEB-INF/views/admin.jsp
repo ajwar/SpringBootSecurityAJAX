@@ -6,9 +6,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<span id="interval" style="display: none" >${interval}</span>
 	<meta login="_csrf" content="${_csrf.token}"/>
 	<!-- default header login is X-CSRF-TOKEN -->
 	<meta login="_csrf_header" content="${_csrf.headerName}"/>
+	<span id="token" style="display: none" >${_csrf.token}</span>
+	<span id="header" style="display: none" >${_csrf.headerName}</span>
 	<link href="<c:url value="/static/css/bootstrap.min.css"/>" rel="stylesheet"/>
 	<link href="<c:url value="/static/css/admin.css"/>" rel="stylesheet"/>
 	<link href="<c:url value="/static/css/flip_table.css"/>" rel="stylesheet"/>
@@ -17,12 +20,11 @@
 	<script src="<c:url value="/static/js/bootstrap.min.js" />"></script>
 	<script src="<c:url value="/static/js/mainAppJs.js" />"></script>
 	<title>Admin page</title>
+	<%--<sec:csrfMetaTags />--%>
 </head>
 <body>
 <a href="" id="createFile"></a>
-<span id="hostManage" style="display: none" >${hostManage}</span>
-<span id="portManage" style="display: none" >${portManage}</span>
-<span id="schemaManage" style="display: none" >${schemaManage}</span>
+
 Dear <strong>${user}</strong>, Welcome to Admin Page.
 <%--
 <sec:authorize access="isFullyAuthenticated()">
@@ -48,7 +50,7 @@ Dear <strong>${user}</strong>, Welcome to Admin Page.
 			</thead>
 			<tbody>
 			<c:forEach var="info" items="${list}">
-				<tr <c:if test="${info.station eq 0}">bgcolor="red"</c:if>>
+				<tr <c:if test="${info.station eq '0'}">bgcolor="red"</c:if>>
 					<td>${info.index}</td>
 					<td>${info.name}</td>
 					<td>${info.version}</td>

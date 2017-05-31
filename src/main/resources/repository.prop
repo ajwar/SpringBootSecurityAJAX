@@ -1,8 +1,13 @@
+#Encoding passwords on the site  https://www.dailycred.com/article/bcrypt-calculator
+#Number of rounds is 4
+#There are two roles:admin and user
+
+
 #Users
 
-user0.login=1
-#password 1
-user0.password=$2a$10$bcWBZxpJybDoX5zaA.oufOM.GHp0Fmfxd1QQYd3htM.b7EWGt7uZ.
+user0.login=admin
+#password admin
+user0.password=$2a$04$IY4PKUSPuMb0KuqPKzCrp.RpzNfrX1hcpTpEB/wPWdeDrnm.PYfVu
 user0.role=admin
 
 user1.login=user
@@ -14,3 +19,4 @@ user2.login=ajwar
 #password ra0843766
 user2.password=$2a$10$1jigvYIYPCqExwcmLqCzYuJ2USPq5BZRGy4grNyq9zK6POPsPz0b.
 user2.role=admin
+

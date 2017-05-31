@@ -21,9 +21,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-		//auth.inMemoryAuthentication().withUser("1").password("1").roles("ADMIN");
-		//auth.inMemoryAuthentication().withUser("user").password("user").roles("ADMIN");
+		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder(4));
 	}
 	
 
@@ -31,7 +29,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/", "/home").permitAll()
-				.mvcMatchers("/admin**").hasRole("ADMIN")/*.access("hasRole('ADMIN')")*/
+				.mvcMatchers("/redirect**","/admin**").hasRole("ADMIN")/*.access("hasRole('ADMIN')")*/
 				.and()
 				.formLogin()
 				.loginPage("/login")
@@ -43,8 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.rememberMeParameter("remember-me")
 				.tokenValiditySeconds(86400)
 				.and()
-				.csrf()
-				.and()
+				/*.csrf()
+				.and()*/
 				.exceptionHandling().accessDeniedPage("/Access_Denied");
 	}
 

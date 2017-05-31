@@ -8,20 +8,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ru.yandex.ajwar.security.utils.Util;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
-import static ru.yandex.ajwar.security.utils.Util.*;
+import static ru.yandex.ajwar.security.configuration.SpringSecurityRememberMeAnnotation.mapProps;
 import static ru.yandex.ajwar.security.utils.Constant.*;
+import static ru.yandex.ajwar.security.utils.Util.*;
 
 
 /**
@@ -32,11 +29,14 @@ public class LoginController {
 
     @RequestMapping(value = {"/","home","/login"}, method = {RequestMethod.GET,RequestMethod.POST})
     public String loginPage(ModelMap model) {
+        propToMap(mapProps,PATH_SERVER_GUI);
         ExecutorService executorService=createAndConfigureExecutorsLoadService();
         AdminController.future=executorService.submit(()->{
             JSONObject obj=new JSONObject();
             obj.put("goal","get_list_servers");
-            AdminController.list=parseResponseToList(sendRequestToServer(SCHEMA,HOST,PORT,obj));
+            int port= Integer.parseInt(mapProps.get("port")==null?"5505":mapProps.get("port"));
+            AdminController.list=parseResponseToList(sendRequestToServer(SCHEMA,HOST,port,obj));
+            //AdminController.managerHost=SCHEMA+"://"+HOST+":"+PORT;
         });
         return "login";
     }
@@ -48,5 +48,16 @@ public class LoginController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "redirect:/login?logout";
+    }
+    public void propToMap(Map map, String pathProps) {
+        Util.PrefixedProperty prop = null;
+        try {
+            prop = loadProperties(getClass().getResourceAsStream(pathProps));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (Map.Entry entry : prop.entrySet()) {
+            map.put(entry.getKey(), entry.getValue()) ;
+        }
     }
 }

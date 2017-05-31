@@ -1,0 +1,5 @@
+#Port manage server
+port=5505
+
+#Server polling interval,ms
+interval=15000

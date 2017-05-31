@@ -1,17 +1,22 @@
 /**
  * Created by Ajwar on 17.04.2017.
  */
-var inputText,hostAndPortAdminServ/*,login*/;
+var inputText,hostAndPortAdminServ;
 init();
 
 function init() {
 /*    setTimeout(updateTableInfoServers,0);*/
     inputText={'goal':'get_list_servers'};
-    setInterval(updateTableInfoServers,10000);
-    $(document).ready(function () {
-        hostAndPortAdminServ=$('#schemaManage').text()+'://'+$('#hostManage').text()+':'+$('#portManage').text();
-        /*login=$('#loginManage').text()*/;
-    });
+    var interval=$('#interval').text();
+    if (interval==null || interval=='' || parseInt(interval,10)<=0) interval=10000;
+    setInterval(updateTableInfoServers,interval);
+    hostAndPortAdminServ="redirect";
+    /*$(document).ready(function () {
+
+        //hostAndPortAdminServ='//'+$('#hostManage').text()+':'+$('#portManage').text();
+        //hostAndPortAdminServ='https://77.244.216.154'+':'+$('#portManage').text();
+        /!*login=$('#loginManage').text()*!/;
+    });*/
 }
 /*function doAjax() {
     $.ajax({
@@ -39,7 +44,7 @@ function updateTableInfoServers() {
     $.postJSON(hostAndPortAdminServ, JSON.stringify(inputText),function (data) {
             $.each(data, function (i, item) {
                 if (i == 0) tempFirst = item.index;
-                if (item.station==0) colorTr=" bgcolor='red'";
+                if (item.station=="0") colorTr=" bgcolor='red'";
                 else colorTr="";
                 trHTML += "<tr"+colorTr+"><td>" + item.index + "</td><td>" + item.name + "</td><td>" + item.version + "</td><td>" + item.port + "</td><td>" + item.adminPort + "</td><td>" + item.count + "</td><td>"+ item.memory + "</td><td>" + item.station + "</td></tr>";
                 opHTML += "<option value='" + item.index + "'>" + item.index + "</option>";
@@ -202,6 +207,22 @@ function hideElement() {
 }
 jQuery.extend({
     postJSON: function( url, data, callback) {
-        return jQuery.post(url, data, callback, "json");
+        //return jQuery.post(url, data, callback, "json");
+        return jQuery.ajax({
+            url:url,
+            method:"POST",
+            dataType:"json",
+            contentType: "application/json;charset=utf-8",
+            data:data,
+            success:callback
+        });
     }
 });
+$(function () {
+    var token = $('#token').text();
+    var header = $('#header').text();
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+});
+

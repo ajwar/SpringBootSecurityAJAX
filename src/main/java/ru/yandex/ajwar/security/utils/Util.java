@@ -7,10 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.yandex.ajwar.security.model.ServerInfo;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -23,7 +20,7 @@ import static ru.yandex.ajwar.security.utils.Constant.NOT_CONNECTION;
  * Created by Ajwar on 21.04.2017.
  */
 public class Util {
-    //private static ExecutorService executorServiceLoad;
+
 
     public static ExecutorService createAndConfigureExecutorsLoadService() {
         ExecutorService executorServiceLoad = Executors.newCachedThreadPool(r -> {
@@ -43,6 +40,41 @@ public class Util {
             userName = principal.toString();
         }
         return userName;
+    }
+
+    public static String getIp() {
+        String[] urlGetIp = new String[]{
+                "http://checkip.amazonaws.com/",
+                "http://icanhazip.com/",
+                "http://www.trackip.net/ip",
+                "http://myexternalip.com/raw",
+                "http://ipecho.net/plain"};
+        String ip = "";
+        URL url = null;
+        for (int i = 0; i < urlGetIp.length; i++) {
+            try {
+                url = new URL(urlGetIp[i]);
+            } catch (MalformedURLException e) {
+                continue;
+            }
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(new InputStreamReader(url.openStream()));
+                ip = in.readLine();
+            } catch (IOException e) {
+                continue;
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if (!ip.isEmpty()) break;
+        }
+        return ip;
     }
 
     public static List<ServerInfo> parseResponseToList(Object object) {
@@ -81,6 +113,7 @@ public class Util {
 
     //"http"  "127.0.0.1"   5505
     public static Object sendRequestToServer(String scheme, String host, int port, JSONObject obj) {
+        //File file=new File("d:\\repository.prop");
         URL myURL = null;
         boolean flag=false;
         int HttpResult = 0;
@@ -94,7 +127,7 @@ public class Util {
             con.setRequestMethod("POST");
             con.setRequestProperty("Accept", "application/json");
             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            con.setConnectTimeout(30000);
+            con.setConnectTimeout(60000);
             con.setReadTimeout(60000);
             con.setDoOutput(true);
             con.setDoInput(true);
@@ -104,10 +137,10 @@ public class Util {
             sb = new StringBuilder();
             HttpResult = con.getResponseCode();
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+           /* e.printStackTrace();*/
         } catch (IOException e) {
-            flag=true;
-            e.printStackTrace();
+            flag = true;
+           /* e.printStackTrace();*/
         }finally {
             if (os!=null) try {
                 os.close();
