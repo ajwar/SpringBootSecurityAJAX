@@ -15,8 +15,8 @@ user1.login=user
 user1.password=$2a$10$eOs6fpk0fiWOBhhAvu1EQug0dy5gmCCND9MWYTRT/qdYGbsUfn1My
 user1.role=user
 
-user2.login=ajwar
-#password ra0843766
-user2.password=$2a$10$1jigvYIYPCqExwcmLqCzYuJ2USPq5BZRGy4grNyq9zK6POPsPz0b.
+user2.login=1
+#password 1
+user2.password=$2a$04$Nj.axcWLKPAAByCEzw264OFC541sg3EmRqQHASA2L8WIqD3ErnSuK
 user2.role=admin
 

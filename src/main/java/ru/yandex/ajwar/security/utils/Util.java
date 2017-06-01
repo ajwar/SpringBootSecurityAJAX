@@ -80,8 +80,8 @@ public class Util {
     public static List<ServerInfo> parseResponseToList(Object object) {
         ServerInfo serverInfo = new ServerInfo();
         List<ServerInfo> list;
-        if (object==null){
-            list=new ArrayList<>();
+        if (object == null) {
+            list = new ArrayList<>();
             serverInfo.setName(NOT_CONNECTION);
             serverInfo.setIndex(NOT_CONNECTION);
             serverInfo.setStation(NOT_CONNECTION);
@@ -91,11 +91,11 @@ public class Util {
             serverInfo.setVersion(NOT_CONNECTION);
             serverInfo.setMemory(NOT_CONNECTION);
             list.add(serverInfo);
-        }else{
+        } else {
             JSONArray array = new JSONArray(object.toString());
-            list=new ArrayList<>(array.length());
+            list = new ArrayList<>(array.length());
             for (int i = 0; i < array.length(); i++) {
-                serverInfo=new ServerInfo();
+                serverInfo = new ServerInfo();
                 JSONObject obj = new JSONObject(array.get(i).toString());
                 serverInfo.setName(obj.getString("name"));
                 serverInfo.setIndex(obj.getString("index"));
@@ -113,14 +113,13 @@ public class Util {
 
     //"http"  "127.0.0.1"   5505
     public static Object sendRequestToServer(String scheme, String host, int port, JSONObject obj) {
-        //File file=new File("d:\\repository.prop");
         URL myURL = null;
-        boolean flag=false;
+        boolean flag = false;
         int HttpResult = 0;
         StringBuilder sb = null;
         HttpURLConnection con = null;
         Object object = null;
-        OutputStream os=null;
+        OutputStream os = null;
         try {
             myURL = new URI(scheme, null, host, port, null, null, null).toURL();
             con = (HttpURLConnection) myURL.openConnection();
@@ -131,7 +130,7 @@ public class Util {
             con.setReadTimeout(60000);
             con.setDoOutput(true);
             con.setDoInput(true);
-            os= con.getOutputStream();
+            os = con.getOutputStream();
             os.write(obj.toString().getBytes("UTF-8"));
             os.flush();
             sb = new StringBuilder();
@@ -141,8 +140,8 @@ public class Util {
         } catch (IOException e) {
             flag = true;
            /* e.printStackTrace();*/
-        }finally {
-            if (os!=null) try {
+        } finally {
+            if (os != null) try {
                 os.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -159,8 +158,8 @@ public class Util {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                }finally {
-                    if (br!=null) try {
+                } finally {
+                    if (br != null) try {
                         br.close();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -192,11 +191,12 @@ public class Util {
         if (properties.size() == 0) throw new IOException(nameProp + " properties is empty.");
         else return properties;
     }
+
     public static PrefixedProperty loadProperties(InputStream is) throws IOException {
         PrefixedProperty properties = new PrefixedProperty();
         try {
             properties.load(new BufferedInputStream(is));
-        }finally {
+        } finally {
             if (is != null) is.close();
         }
         if (properties.size() == 0) throw new IOException("properties is empty.");

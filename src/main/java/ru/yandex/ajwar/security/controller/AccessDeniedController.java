@@ -12,7 +12,7 @@ import static ru.yandex.ajwar.security.utils.Util.getPrincipal;
  */
 @Controller
 public class AccessDeniedController {
-    @RequestMapping(value = "/Access_Denied", method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/Access_Denied", method = {RequestMethod.GET, RequestMethod.POST})
     public String accessDeniedPage(ModelMap model) {
         model.addAttribute("user", getPrincipal());
         return "accessDenied";

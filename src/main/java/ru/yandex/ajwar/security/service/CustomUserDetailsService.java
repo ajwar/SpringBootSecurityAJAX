@@ -16,11 +16,11 @@ import ru.yandex.ajwar.security.model.User;
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private IUserService userService;
-    //UserDetails loadUser;
+
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user=userService.getUserByLogin(login);
-        UserDetails userDetails=new org.springframework.security.core.userdetails.User(user.getLogin(),user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole().toString()));
+        User user = userService.getUserByLogin(login);
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole().toString()));
         return userDetails;
     }
 }

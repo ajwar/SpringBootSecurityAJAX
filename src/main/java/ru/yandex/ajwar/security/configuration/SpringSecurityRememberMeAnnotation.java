@@ -13,24 +13,24 @@ import java.util.Map;
 
 
 @SpringBootApplication
-@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 public class SpringSecurityRememberMeAnnotation extends SpringBootServletInitializer {
-	public static Map<String,String> mapProps=new HashMap<>();
+    public static Map<String, String> mapProps = new HashMap<>();
 
-	public static void main(String[] args){
+    public static void main(String[] args) {
 /*		String currentPath=SpringSecurityRememberMeAnnotation.class
-				.getProtectionDomain()
+                .getProtectionDomain()
 				.getCodeSource().getLocation()
 				.getPath()
 				.replace('/', File.separator.charAt(0));
 		if (currentPath.indexOf(":")<3 && currentPath.indexOf(":")>0) currentPath=currentPath.substring(1);*/
-		SpringApplication.run(SpringSecurityRememberMeAnnotation.class, args);
+        SpringApplication.run(SpringSecurityRememberMeAnnotation.class, args);
 
-	}
+    }
 
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(SpringSecurityRememberMeAnnotation.class);
-	}
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(SpringSecurityRememberMeAnnotation.class);
+    }
 }

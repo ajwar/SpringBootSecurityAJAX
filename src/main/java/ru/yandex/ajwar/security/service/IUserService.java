@@ -5,5 +5,5 @@ import ru.yandex.ajwar.security.model.User;
 
 public interface IUserService {
 
-	User getUserByLogin(String login);
+    User getUserByLogin(String login);
 }

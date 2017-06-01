@@ -20,8 +20,8 @@
 .rtable--flip tbody {
     -webkit-overflow-scrolling: touch;
 
-/*    background: radial-gradient(left, ellipse, rgba(0,0,0, .2) 0%, rgba(0, 0, 0, 0) 75%) 0 center,
-                radial-gradient(right, ellipse, rgba(0,0,0, .2) 0%, rgba(0, 0, 0, 0) 75%) 100% center;*/
+    /*    background: radial-gradient(left, ellipse, rgba(0,0,0, .2) 0%, rgba(0, 0, 0, 0) 75%) 0 center,
+                    radial-gradient(right, ellipse, rgba(0,0,0, .2) 0%, rgba(0, 0, 0, 0) 75%) 100% center;*/
     background-size: 10px 100%, 10px 100%;
     background-attachment: scroll, scroll;
     background-repeat: no-repeat;

@@ -1,5 +1,11 @@
 #Port manage server
 port=5505
 
+#Host manage server
+host=127.0.0.1
+
+#Protocol manage server
+protocol=HTTP
+
 #Server polling interval,ms
 interval=15000
